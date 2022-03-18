@@ -1,19 +1,58 @@
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
+
+import { useForm } from "../../hooks/useForm";
+import { login } from "../../actions/auth";
+
 export const LoginScreen = () => {
+
+  const dispatch = useDispatch()
+
+  const [formValues, handleInputChange] = useForm({
+    email: "kike@gmail.com",
+    password: "123456",
+  });
+
+  const { email, password } = formValues;
+
+  const handleLogin = (e) =>{
+    e.preventDefault();
+
+    dispatch( login(12345, 'Enrique') );
+
+  }
+
   return (
     <>
-      <h3 className="auth__title" >Login</h3>
-      <form>
-        <input type="text" placeholder="Email" name="email" className="auth__input" autoComplete="off" />
+      <h3 className="auth__title">Login</h3>
+      <form onSubmit={handleLogin} >
+        <input
+          type="text"
+          placeholder="Email"
+          name="email"
+          value={email}
+          className="auth__input"
+          autoComplete="off"
+          onChange={handleInputChange}
+        />
 
-        <input type="password" placeholder="Password" name="password" className="auth__input" />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          name="password"
+          className="auth__input"
+          onChange={handleInputChange}
+        />
 
-        <button type="submit" className="btn btn-primary btn-block">Login</button>
+        <button type="submit" className="btn btn-primary btn-block">
+          Login
+        </button>
 
         <hr />
 
-        <div className="auth__social-networks" >
+        <div className="auth__social-networks">
           <p>Login with social networks</p>
 
           <div className="google-btn">
@@ -30,11 +69,9 @@ export const LoginScreen = () => {
           </div>
         </div>
 
-        <Link to="/auth/register" className="link" >
-
+        <Link to="/auth/register" className="link">
           Create new account
         </Link>
-
       </form>
     </>
   );
