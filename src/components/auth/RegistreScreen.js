@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
+import { Link } from "react-router-dom";
 import validator from "validator";
 
 import { useForm } from "../../hooks/useForm";
+import { setError, removeError } from "../../actions/ui";
 
 export const RegistreScreen = () => {
+  const dispatch = useDispatch();
+
   //formulario
   const [formValues, handleInputChange] = useForm({
     name: "Enrique",
@@ -20,24 +23,28 @@ export const RegistreScreen = () => {
     e.preventDefault();
 
     if (isFormValid()) {
-      console.log("Formulario correcto");
+      console.log('Formulario correcto')
     }
+    
   };
 
   const isFormValid = () => {
     if (name.trim().length === 0) {
-      console.log("name is required");
+      dispatch(setError("el nombre es requerido"));
       return false;
     } else if (!validator.isEmail(email)) {
-      console.log("Email is not valid");
+      dispatch(setError("El correo no es valido"));
       return false;
     } else if (password !== password2 || password.length < 5) {
-      console.log(
-        "Password should be at least 6 characters and match each other"
+      dispatch(
+        setError(
+          "La contraseña no son iguales y tiene que se mayor a 6 caracteres"
+        )
       );
+ 
       return false;
     }
-
+    dispatch(removeError())
     return true;
   };
 
