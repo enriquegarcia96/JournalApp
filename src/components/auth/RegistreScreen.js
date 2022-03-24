@@ -1,13 +1,15 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 import validator from "validator";
 
 import { useForm } from "../../hooks/useForm";
 import { setError, removeError } from "../../actions/ui";
+import { startRegisterWithEmailPasswordName } from "../../actions/auth";
 
 export const RegistreScreen = () => {
   const dispatch = useDispatch();
+  const { msgError } = useSelector((state) => state.ui); // para capturar el mensaje de error
 
   //formulario
   const [formValues, handleInputChange] = useForm({
@@ -23,9 +25,8 @@ export const RegistreScreen = () => {
     e.preventDefault();
 
     if (isFormValid()) {
-      console.log('Formulario correcto')
+      dispatch(startRegisterWithEmailPasswordName(email, password, name));
     }
-    
   };
 
   const isFormValid = () => {
@@ -41,10 +42,10 @@ export const RegistreScreen = () => {
           "La contraseña no son iguales y tiene que se mayor a 6 caracteres"
         )
       );
- 
+
       return false;
     }
-    dispatch(removeError())
+    dispatch(removeError());
     return true;
   };
 
@@ -52,7 +53,7 @@ export const RegistreScreen = () => {
     <>
       <h3 className="auth__title">Register</h3>
       <form onSubmit={handleRegister}>
-        <div className="auth__alert-error">Hola mundo</div>
+        {msgError && <div className="auth__alert-error">{msgError}</div>}
 
         <input
           type="text"
